@@ -1,0 +1,110 @@
+﻿@page "/"
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@if (items == null)
+{
+    <p>There is no information here.</p>
+}
+else
+{
+    <table border="1">
+        <thead>
+            <tr>
+                <td>
+                    ID
+                </td>
+                <td>
+                    Title
+                </td>
+                <td>
+                    Date
+                </td>
+                <td>
+                    Active
+                </td>
+                <td>
+                    Type
+                </td>
+                <td>
+                    Usage
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (MyDataStructure item in items)
+            {
+                <tr>
+                    <td>
+                        @(item.PK_MyDataStructure == null ? "N/A" : item.PK_MyDataStructure)
+                    </td>
+                    <td>
+                        @(item.Title == null ? "" : item.Title)
+                    </td>
+                    <td>
+                        @(item.DataDate == null ? "" : item.DataDate)
+                    </td>
+                    <td>
+                        @item.Active
+                    </td>
+                    <td>
+                        @*@item.FK_Type*@
+                        @(item.FK_Type == null ? "" : listType.Where(x => x.PK_Type == @item.FK_Type).First().Type)
+                        @*Gets text value from list*@
+                    </td>
+                    <td>
+                        @*@item.FK_Usage*@
+                        @(item.FK_Usage == null ? "" : listUsage.Where(x => x.PK_Usage == @item.FK_Usage).First().Usage)
+                        @*Gets text value from list*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<br />
+<EditForm Model="@items" OnValidSubmit="SaveMyData">
+    @foreach (MyDataStructure item in items)
+    {
+        <MyDataEdit myData="item" listUsage="listUsage" listType="listType"></MyDataEdit>
+    }
+    <input type="button" value="Add Item" @onclick="AddNewDataItem" />
+    <button type="submit">Save to DB</button>
+</EditForm>
+
+@code {
+    private List<MyDataStructure> items = new();
+    private List<MyUsage> listUsage = new();
+    private List<MyType> listType = new();
+    protected override async Task OnInitializedAsync()
+    {
+        await load();
+    }
+    private async Task load()
+    {
+        //insert your code to load from local storage, SQL, etc
+        items.Add(new MyDataStructure() { PK_MyDataStructure = 1, Title = "Teste Entry", DataDate = DateTime.Parse(DateTime.Now.ToShortDateString()), FK_Type = 1, Active = true, FK_Usage = 2 });
+
+        //creating dummy date for select and radio list, should also be loaded from local storage, SQL, etc
+        listUsage.Add(new MyUsage() { PK_Usage = 1, Usage = "Usage 1" });
+        listUsage.Add(new MyUsage() { PK_Usage = 2, Usage = "Usage 2" });
+        listUsage.Add(new MyUsage() { PK_Usage = 3, Usage = "Usage 3" });
+        listUsage.Add(new MyUsage() { PK_Usage = 4, Usage = "Usage 4" });
+        listType.Add(new MyType() { PK_Type = 1, Type = "Type 1" });
+        listType.Add(new MyType() { PK_Type = 2, Type = "Type 2" });
+        listType.Add(new MyType() { PK_Type = 3, Type = "Type 3" });
+    }
+    private void AddNewDataItem()
+    {
+        items.Add(new());
+    }
+    private async Task SaveMyData()
+    {
+        //insert your code to save to local storage, SQL, etc
+        //pressing this button without saving will causa the initial table to update, because the UI is directly binded to the used variable
+    }
+}

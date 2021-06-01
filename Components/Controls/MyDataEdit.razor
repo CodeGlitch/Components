@@ -1,0 +1,55 @@
+﻿
+<div style="width:100%;">
+    <p>
+        <LabelBold label="ID:" />
+        <LabelNormal label="@(myData.PK_MyDataStructure == null ? "N/A (Has not been inserted yet)" : myData.PK_MyDataStructure.ToString())" />
+    </p>
+    <p>
+        <LabelBold label="Title:" />
+        <InputText @bind-Value="myData.Title" />
+        <ValidationMessage For="() => myData.Title"></ValidationMessage>
+    </p>
+    <p>
+        <LabelBold label="Date:" />
+        <InputDate @bind-Value="myData.DataDate" />
+        <ValidationMessage For="() => myData.DataDate"></ValidationMessage>
+    </p>
+    <p>
+        <LabelBold label="Usage:" />
+        <InputSelect @bind-Value="myData.FK_Usage">
+            <option value="">Select...</option>
+            @foreach (MyUsage item in listUsage)
+            {
+                <option value="@item.PK_Usage">@item.Usage</option>
+            }
+        </InputSelect>
+
+    </p>
+    <p>
+        <LabelBold label="Active:" />
+        <InputCheckbox @bind-Value="myData.Active" />
+    </p>
+    <p>
+        <LabelBold label="Type:" />
+        <br>
+        <InputRadioGroup @bind-Value="myData.FK_Type">
+            @foreach (MyType item in listType)
+            {
+                <InputRadio Value="@item.PK_Type" />
+                <LabelNormal label="@item.Type" />
+                <br>
+            }
+        </InputRadioGroup>
+    </p>
+
+    <hr />
+</div>
+
+@code {
+    [Parameter]
+    public MyDataStructure myData { get; set; }
+    [Parameter]
+    public List<MyUsage> listUsage { get; set; }
+    [Parameter]
+    public List<MyType> listType { get; set; }
+}
