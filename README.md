@@ -1,3 +1,7 @@
+# Display of table content and small form with some inputs/controls as a example 
+
+![Capture.PNG](Capture.PNG)
+
 ### Files changed/created:
 * Model -> MyDataStructure.cs
 * Model -> MyType.cs
